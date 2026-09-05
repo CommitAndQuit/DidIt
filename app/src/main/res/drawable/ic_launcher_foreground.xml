@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Adaptive-icon foreground: a white "?" centered within the 108dp canvas
+     safe zone. The blue background lives in the adaptive-icon <background>. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Hook + stem of the question mark (stroked). -->
+    <path
+        android:pathData="M40,46 C40,31 68,31 68,46 C68,57 54,56 54,64 L54,68"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="11"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+
+    <!-- Dot of the question mark (filled). -->
+    <path
+        android:pathData="M48,80 A6,6 0 1 1 60,80 A6,6 0 1 1 48,80 Z"
+        android:fillColor="#FFFFFF" />
+</vector>
