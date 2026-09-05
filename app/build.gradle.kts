@@ -44,6 +44,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    androidResources {
+        // Keep the LLM model uncompressed so the inference engine can mmap it.
+        noCompress += "litertlm"
+    }
 }
 
 dependencies {
@@ -68,11 +72,13 @@ dependencies {
     implementation("androidx.glance:glance-appwidget:1.0.0")
     implementation("androidx.glance:glance-material3:1.0.0")
 
-    // MediaPipe GenAI (LiteRT-LM equivalent)
-    implementation("com.google.mediapipe:tasks-genai:0.10.14")
+    // MediaPipe GenAI (LiteRT-LM) — needs a version with .litertlm support
+    implementation("com.google.mediapipe:tasks-genai:0.10.35")
 
     testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test:runner:1.5.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2024.02.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
