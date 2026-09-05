@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import kotlinx.coroutines.launch
@@ -81,11 +82,16 @@ class MainActivity : ComponentActivity() {
         val workRequest = PeriodicWorkRequestBuilder<AccountabilityWorker>(15, TimeUnit.MINUTES)
             .build()
 
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+        val workManager = WorkManager.getInstance(this)
+        workManager.enqueueUniquePeriodicWork(
             "AccountabilityCheck",
             ExistingPeriodicWorkPolicy.UPDATE,
             workRequest
         )
+
+        // Run one check immediately so the user (and widget) get feedback now
+        // instead of waiting up to 15 minutes for the first periodic run.
+        workManager.enqueue(OneTimeWorkRequestBuilder<AccountabilityWorker>().build())
     }
 }
 
