@@ -19,7 +19,12 @@ class CalendarObserverWorker(
 ) : CoroutineWorker(context, params) {
 
     override suspend fun doWork(): Result {
+        // Arm the exact alarm for the next upcoming event...
         EventScheduler.scheduleNext(context)
+        // ...and check right now, so an event that's added while already ongoing
+        // (the natural way people test) nags immediately instead of waiting for
+        // the periodic worker. The check is a no-op when nothing is ongoing.
+        EventScheduler.checkNow(context)
         // Re-register to keep watching for the next change.
         EventScheduler.observeCalendar(context)
         return Result.success()

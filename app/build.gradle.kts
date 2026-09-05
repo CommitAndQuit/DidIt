@@ -3,6 +3,11 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+base {
+    // Produces didit-debug.apk / didit-release.apk instead of app-*.apk
+    archivesName = "didit"
+}
+
 android {
     namespace = "com.example.accountability"
     compileSdk = 34

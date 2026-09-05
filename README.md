@@ -60,7 +60,7 @@ git lfs pull
 ./gradlew assembleDebug
 
 # Install on a connected device/emulator
-adb install -r app/build/outputs/apk/debug/app-debug.apk
+adb install -r app/build/outputs/apk/debug/didit-debug.apk
 ```
 
 Then open the app, enter a short profile, and tap **Grant Permissions & Start**. Add the widget to your home screen.
