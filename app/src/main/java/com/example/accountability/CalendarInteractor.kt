@@ -65,4 +65,31 @@ class CalendarInteractor(private val context: Context) {
 
         return events
     }
+
+    /**
+     * Returns the DTSTART (epoch millis) of the earliest non-all-day event that
+     * starts strictly after [after], or null if there is none. Used to schedule
+     * an exact alarm so a nag fires promptly when the event begins.
+     */
+    fun getNextEventStartAfter(after: Long): Long? {
+        val projection = arrayOf(CalendarContract.Events.DTSTART)
+        val selection = "(${CalendarContract.Events.DTSTART} > ?) AND " +
+                "(${CalendarContract.Events.ALL_DAY} = 0)"
+        val selectionArgs = arrayOf(after.toString())
+
+        return try {
+            context.contentResolver.query(
+                CalendarContract.Events.CONTENT_URI,
+                projection,
+                selection,
+                selectionArgs,
+                "${CalendarContract.Events.DTSTART} ASC"
+            )?.use { cursor ->
+                if (cursor.moveToFirst()) cursor.getLong(0) else null
+            }
+        } catch (e: SecurityException) {
+            Log.e("CalendarInteractor", "Missing READ_CALENDAR permission", e)
+            null
+        }
+    }
 }

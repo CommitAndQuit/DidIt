@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import kotlinx.coroutines.launch
@@ -91,7 +92,19 @@ class MainActivity : ComponentActivity() {
 
         // Run one check immediately so the user (and widget) get feedback now
         // instead of waiting up to 15 minutes for the first periodic run.
-        workManager.enqueue(OneTimeWorkRequestBuilder<AccountabilityWorker>().build())
+        workManager.enqueue(
+            OneTimeWorkRequestBuilder<AccountabilityWorker>()
+                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                .build()
+        )
+
+        // Arm an exact alarm so upcoming events nag promptly at their start,
+        // rather than whenever the inexact periodic worker happens to run.
+        EventScheduler.scheduleNext(this)
+
+        // Observe the calendar so newly added/edited events re-arm the alarm
+        // immediately instead of waiting for the next periodic poll.
+        EventScheduler.observeCalendar(this)
     }
 }
 
